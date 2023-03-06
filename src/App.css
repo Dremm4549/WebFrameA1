@@ -1,0 +1,117 @@
+.Header-Content{
+  margin-left: 50px;
+}
+body{
+  background-color: #f8f8f8
+  /* #f5f5f5; */
+}
+
+.reddit-post{
+  position: relative;
+  border-style: solid;
+  border-width: 3px;
+  border-color: gainsboro;
+  background-color: antiquewhite;
+  border-radius: 10px;
+  border-spacing: 15px;
+  border-collapse: separate;
+  
+  padding: 10px;
+  margin: 15px;
+  margin-left: 50px;
+  
+}
+
+.reddit-liked-post{
+  position: relative;
+  border-style: solid;
+  border-width: 3px;
+  border-color: gainsboro;
+  background-color: rgb(126, 175, 119);
+  border-radius: 10px;
+  border-spacing: 15px;
+  border-collapse: separate;
+  
+  padding: 10px;
+  margin: 15px;
+  margin-left: 50px;
+  
+}
+
+.Like-Button{
+  padding: 2px;
+  margin-left: 15px;
+}
+
+
+.Search-Button {
+  padding: 2px;
+  margin-left: 65px;
+  background-color: green;
+  border-radius: 10px;
+  width: 320px;
+  height: 100px;
+  
+  color: aliceblue;
+  font-size: 24px;
+  font-weight: bold;
+  border: none;
+  position: absolute;
+  left: 0px;
+  top: 150px;
+}
+
+.Search-Button:hover {
+  background-color: rgb(3, 199, 3);
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+}
+
+.Search-Button:active {
+  background-color: #004211;
+  color: #fff;
+}
+
+.Remove-Liked-Post{
+  position: absolute;
+  bottom: 10px;
+  right: 10px;
+}
+
+.Liked-Posts-Button{
+  padding: 2px;
+  margin-left: 300px;
+  background-color: rgb(180, 0, 0);
+  border-radius: 10px;
+  width: 150;
+  height: 80px;
+  
+  color: aliceblue;
+  font-size: 24px;
+  font-weight: bold;
+  border: none;
+  position: absolute;
+}
+
+.Liked-Posts-Button:hover {
+  background-color: rgb(255, 3, 3);
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+}
+
+.Liked-Posts-Button:active {
+  background-color: rgb(56, 0, 0);
+  color: #fff;
+}
+
+.Search-Box{
+  padding: 2px;
+  margin-left: 15px;
+  width: 300px;
+  height: 40px;
+  text-align: center;
+}
+
+.Reddit-Searches{
+  margin-top: 140px;
+}
+
+
