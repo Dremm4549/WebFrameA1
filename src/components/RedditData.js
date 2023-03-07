@@ -29,7 +29,7 @@ function RedditData({subRedditName, likedRedditPosts, addToLikedPosts}) {
     },[url]);
 
     const handleLikeClick = (post) =>{
-        addToLikedPosts(post);
+        addToLikedPosts(post.id);
         setLikeBtnVisability((prevState) => ({
             ...prevState,
             [post.id]: true,
@@ -44,7 +44,6 @@ function RedditData({subRedditName, likedRedditPosts, addToLikedPosts}) {
                 </div>
             ):(
                 <div>            
-                    {console.log("likeBtnVisability:", likedRedditPosts)}
                     {redditPostData.data.children.slice(0,10).map((child) => (
                         <div key={child.data.id} className={`reddit-post ${likeBtnVisability[child.data.id] ? 'reddit-liked-post' : ""}`}>
                             <h3>Post Name: {child.data.title}</h3>

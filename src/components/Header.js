@@ -36,22 +36,25 @@ const Header = ({title}) => {
         setFetchPage(!ShowFetchPage);
         if(ShowFetchPage){
             console.log('SHOW LIKED');
-            const likedPosts = JSON.parse(localStorage.getItem('likedRedditPostIds')) || [];
             
-            likedPosts.forEach(postId => {
-                fetch(`https://www.reddit.com/comments/${postId}/.json`)
-                  .then(response => response.json())
-                  .then(data => {
-                    setlikedPostIDInfo(prevState => [...prevState, {
-                        id: data[0].data.children[0].data.id, 
-                        title: data[0].data.children[0].data.title,
-                        score: data[0].data.children[0].data.score,
-                        thumbnail: data[0].data.children[0].data.thumbnail,
-                        content: data[0].data.children[0].data.selftext
-                    }])
-                  })
-                  .catch(error => console.error(error));
-              });
+            const likedPosts = JSON.parse(localStorage.getItem('likedRedditPostIdss')) || [];
+
+            likedPosts.map((item) => alert(JSON.stringify(item)));
+            
+            // likedPosts.forEach(postId => {
+            //     fetch(`https://www.reddit.com/comments/${postId}/.json`)
+            //       .then(response => response.json())
+            //       .then(data => {
+            //         setlikedPostIDInfo(prevState => [...prevState, {
+            //             id: data[0].data.children[0].data.id, 
+            //             title: data[0].data.children[0].data.title,
+            //             score: data[0].data.children[0].data.score,
+            //             thumbnail: data[0].data.children[0].data.thumbnail,
+            //             content: data[0].data.children[0].data.selftext
+            //         }])
+            //       })
+            //       .catch(error => console.error(error));
+            //   });
         }
         else{
             setlikedPostIDInfo([]);
@@ -61,17 +64,20 @@ const Header = ({title}) => {
     }
 
     const addToLikedPosts = (post) => {
-        if (post && post.id) {
-          setLikedRedditPosts((prevLikedRedditPosts) => {
-            const newLikedRedditPosts = prevLikedRedditPosts.concat(post);
-            localStorage.setItem('likedRedditPostIds', JSON.stringify(newLikedRedditPosts.map((post) => post.id)));
-            return newLikedRedditPosts;
-          });
-        }
+        console.log(post);
+        const likeddPostss = JSON.parse(localStorage.getItem('likedRedditPostIdss')) || [];
+        likeddPostss.push(post)
+        localStorage.setItem('likedRedditPostIdss', JSON.stringify(likeddPostss));
+        // if (post && post.id) {
+        //     setLikedRedditPosts((prevLikedRedditPosts) => {
+        //     const newLikedRedditPosts = prevLikedRedditPosts.concat(post);
+        //     localStorage.setItem('likedRedditPostIds', JSON.stringify(newLikedRedditPosts.map((post) => post.id)));
+        //     return newLikedRedditPosts;
+        //   });
+        // }
       };
       
       const removeLikedPost = (postId) => {
-
         const likedPostIds = JSON.parse(localStorage.getItem('likedRedditPostIds'));
         const updatedLikedPostIds = likedPostIds.filter((id) => id !== postId);
         localStorage.setItem('likedRedditPostIds', JSON.stringify(updatedLikedPostIds));
@@ -109,7 +115,15 @@ const Header = ({title}) => {
                 <>
                      <Button className='Liked-Posts-Button'text={"Fetch More Reddit Posts"} colour={"white"} onClick={changePage}/>
                      <div className='Reddit-Content'>
-                        {likedPostIDInfo.map((post) => {
+                        {JSON.parse(localStorage.getItem('likedRedditPostIdss')).map((postid) => {
+                            return(
+                                <div key={postid} className='reddit-liked-post'>
+                                    <p>{postid}</p>
+                                    <button className='Remove-Liked-Post' onClick={() => removeLikedPost(postid)}>Remove from Liked</button>
+                                </div>
+                            )
+                        })}
+                        {/* {likedPostIDInfo.map((post) => {
                         if (post.title) {
                             return (
                             <div key={post.id} className='reddit-liked-post'>
@@ -127,7 +141,7 @@ const Header = ({title}) => {
                             </div>
                             );
                         }
-                        })}
+                        })} */}
                         
                      </div>
                 </>
