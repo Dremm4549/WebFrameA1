@@ -78,8 +78,8 @@ const Header = ({title}) => {
                             <div key={post.id} className='reddit-liked-post'>
                                 <h3>Post Name: {post.title}</h3>
 
-                                {likedRedditPosts.thumbnail !== 'self' ? (
-                                <img src={post.thumbnail} alt={likedRedditPosts.title}></img>
+                                {post.thumbnail !== 'self' ? (
+                                <img src={post.thumbnail} alt={post.title}></img>
                                 ): (
                                     <p>{post.selftext}</p>
                                 )}
@@ -87,17 +87,6 @@ const Header = ({title}) => {
                                 <button className='Remove-Liked-Post' onClick={() => removeLikedPost(post.id)}>Remove from Liked</button>
                             </div>
                         ))}
-                        
-                            {/* // <div key={likedRedditPosts.id} className='reddit-post'>
-                            //     <h3>Post Name: {likedRedditPosts.title}</h3>
-                            //     <p>Post ID: {likedRedditPosts.id}</p>
-                                {likedRedditPosts.thumbnail !== 'self' ? (
-                                <img src={likedRedditPosts.thumbnail} alt={likedRedditPosts.title}></img>
-                                ): (
-                                    <p>{likedRedditPosts.selftext}</p>
-                                )}
-                            //     <button className='Remove-Liked-Post' onClick={removeLikedPost}>Remove from Liked</button>                      
-                            // </div> */}
                         
                      </div>
                 </>
