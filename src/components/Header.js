@@ -7,7 +7,7 @@
 
 */
 
-import React, {useEffect, useState} from 'react';
+import React, {useState} from 'react';
 import Button from './Button'
 import RedditData from './RedditData';
 
@@ -20,7 +20,7 @@ const Header = ({title}) => {
         return storedLikedRedditPostIds ? JSON.parse(storedLikedRedditPostIds) : [];
       });
 
-      const[likedPostIDInfo, setlikedPostIDInfo] = useState([]);
+      const [likedPostIDInfo, setlikedPostIDInfo] = useState([]);
     
     const [ShowFetchPage, setFetchPage] = useState(true);
     
@@ -34,61 +34,67 @@ const Header = ({title}) => {
 
     const changePage = () => {
         setFetchPage(!ShowFetchPage);
-        if(ShowFetchPage){
-            console.log('SHOW LIKED');
-            
+        if(ShowFetchPage){        
             const likedPosts = JSON.parse(localStorage.getItem('likedRedditPostIdss')) || [];
 
-            likedPosts.map((item) => alert(JSON.stringify(item)));
+            const postInfo = [];
+            const fetchPromises = likedPosts.map(postId => {
+            return fetch(`https://www.reddit.com/comments/${postId}/.json`)
+                .then(response => response.json())
+                .then(data => {
+                const id = data[0].data.children[0].data.id;
+                const title = data[0].data.children[0].data.title;
+                const score = data[0].data.children[0].data.score;
+                const thumbnail = data[0].data.children[0].data.thumbnail;
+                const content = data[0].data.children[0].data.selftext;
+                const comments = data[0].data.children[0].data.permalink;
+                postInfo.push({ id, title,score,thumbnail,content,comments });
+                })
+                .catch(error => console.error(error));
+            });
+            Promise.all(fetchPromises).then(() => {
+            setlikedPostIDInfo(postInfo);
+            });
             
-            // likedPosts.forEach(postId => {
-            //     fetch(`https://www.reddit.com/comments/${postId}/.json`)
-            //       .then(response => response.json())
-            //       .then(data => {
-            //         setlikedPostIDInfo(prevState => [...prevState, {
-            //             id: data[0].data.children[0].data.id, 
-            //             title: data[0].data.children[0].data.title,
-            //             score: data[0].data.children[0].data.score,
-            //             thumbnail: data[0].data.children[0].data.thumbnail,
-            //             content: data[0].data.children[0].data.selftext
-            //         }])
-            //       })
-            //       .catch(error => console.error(error));
-            //   });
         }
         else{
-            setlikedPostIDInfo([]);
+            setlikedPostIDInfo([])
         }
         setInputName('');
         setSubRedditName('');
+
+        //line 43
+        //  likedPosts.forEach(postId => {
+        //         fetch(`https://www.reddit.com/comments/${postId}/.json`)
+        //           .then(response => response.json())
+        //           .then(data => {
+        //             setlikedPostIDInfo(prevState => [...prevState, {
+        //                 id: data[0].data.children[0].data.id, 
+        //                 title: data[0].data.children[0].data.title,
+        //                 score: data[0].data.children[0].data.score,
+        //                 thumbnail: data[0].data.children[0].data.thumbnail,
+        //                 content: data[0].data.children[0].data.selftext
+        //             }])
+        //           })
+        //           .catch(error => console.error(error));
+        //       });
     }
 
     const addToLikedPosts = (post) => {
-        console.log(post);
+        console.log( "Liked "  + post);
         const likeddPostss = JSON.parse(localStorage.getItem('likedRedditPostIdss')) || [];
         likeddPostss.push(post)
         localStorage.setItem('likedRedditPostIdss', JSON.stringify(likeddPostss));
-        // if (post && post.id) {
-        //     setLikedRedditPosts((prevLikedRedditPosts) => {
-        //     const newLikedRedditPosts = prevLikedRedditPosts.concat(post);
-        //     localStorage.setItem('likedRedditPostIds', JSON.stringify(newLikedRedditPosts.map((post) => post.id)));
-        //     return newLikedRedditPosts;
-        //   });
-        // }
+
+        console.log("maybe " + likedPostIDInfo)
+
       };
       
       const removeLikedPost = (postId) => {
-        const likedPostIds = JSON.parse(localStorage.getItem('likedRedditPostIds'));
+        const likedPostIds = JSON.parse(localStorage.getItem('likedRedditPostIdss'));
         const updatedLikedPostIds = likedPostIds.filter((id) => id !== postId);
-        localStorage.setItem('likedRedditPostIds', JSON.stringify(updatedLikedPostIds));
-
-        setLikedRedditPosts(prevLikedRedditPosts => 
-          prevLikedRedditPosts.filter(post => post.id !== postId)
-        );
-
-        setlikedPostIDInfo(prevLikedPostIDInfo =>
-            prevLikedPostIDInfo.filter(post => post.id !== postId)
-          );
+        localStorage.setItem('likedRedditPostIdss', JSON.stringify(updatedLikedPostIds));
+        setlikedPostIDInfo(prevLikedRedditPosts => prevLikedRedditPosts.filter(post => post.id !== postId));
       };   
          
     return(
@@ -108,21 +114,31 @@ const Header = ({title}) => {
                     <Button classN={'Liked-Posts-Button'} text={"Show liked Posts"} colour={"white"} onClick={changePage}/>
                 </div>
                     <div className='Reddit-Content'>
-                        {subRedditName && <RedditData subRedditName={subRedditName} addToLikedPosts={addToLikedPosts} likedRedditPosts={likedRedditPosts}/>}
+                        {subRedditName && <RedditData subRedditName={subRedditName} addToLikedPosts={addToLikedPosts} likedRedditPosts={likedPostIDInfo}/>}
                     </div>
             </div>
             ) : (
                 <>
                      <Button className='Liked-Posts-Button'text={"Fetch More Reddit Posts"} colour={"white"} onClick={changePage}/>
                      <div className='Reddit-Content'>
-                        {JSON.parse(localStorage.getItem('likedRedditPostIdss')).map((postid) => {
-                            return(
-                                <div key={postid} className='reddit-liked-post'>
-                                    <p>{postid}</p>
-                                    <button className='Remove-Liked-Post' onClick={() => removeLikedPost(postid)}>Remove from Liked</button>
-                                </div>
-                            )
-                        })}
+                     {likedPostIDInfo.map((post) => {
+                    return (
+                        <div key={post.id} className='reddit-liked-post'>
+                            <p>{post.title}</p>
+                            <p>Score: {post.score}</p>
+                            
+                            {post.thumbnail !== 'self' ? (
+                                <img src={post.thumbnail} alt={post.title}></img>
+                                ): (
+                                <p>{post.selftext}</p>
+                                )}
+                            <a href={`https://www.reddit.com${post.comments}`} className='Comment-Link'>View Comments</a>
+                            <button className='Remove-Liked-Post' onClick={() => removeLikedPost(post.id)}>Remove from Liked</button>
+                        </div>
+                    );
+                })}
+
+
                         {/* {likedPostIDInfo.map((post) => {
                         if (post.title) {
                             return (

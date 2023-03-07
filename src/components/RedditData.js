@@ -13,28 +13,37 @@ import React,{useEffect, useState} from 'react';
 function RedditData({subRedditName, likedRedditPosts, addToLikedPosts}) {
     const url = `https://api.reddit.com/r/${subRedditName}/hot/`
     
-    const[redditPostData, setRedditPostData] = useState([{}]);
+    const[redditPostData, setRedditPostData] = useState([]);
     const[likeBtnVisability, setLikeBtnVisability] = useState([]); 
+    
+    const [likedPosts, setLikedPosts] = useState(() => {
+        const storedLikedPosts = localStorage.getItem('likedRedditPostIdss');
+        return storedLikedPosts ? JSON.parse(storedLikedPosts) : [];
+    });
 
     useEffect(() => {
         fetch(`${url}`).then(
             res => res.json()
         ).then(
             data => {
-                setRedditPostData(data)
-                console.log(data)
-                
+                setRedditPostData(data)      
             }
         )
     },[url]);
 
-    const handleLikeClick = (post) =>{
+    const handleLikeClick = (post) => {
         addToLikedPosts(post.id);
+      
+        // Disable button
         setLikeBtnVisability((prevState) => ({
-            ...prevState,
-            [post.id]: true,
+          ...prevState,
+          [post.id]: true,
         }));
-    }
+      
+        // Update likedPosts state
+        setLikedPosts((prevLikedPosts) => [...prevLikedPosts, post.id]);
+      };
+      
 
     return (
         <div className='Reddit-Searches'>
@@ -55,9 +64,10 @@ function RedditData({subRedditName, likedRedditPosts, addToLikedPosts}) {
                                     <p>{child.data.selftext}</p>
                                 </>
                             )}
-                              {likedRedditPosts.some(postId => postId === child.data.id) ? (
+
+                           {likedPosts.includes(child.data.id) ? (
                                 <button className="Like-Button" disabled>Liked</button>
-                                ) : (
+                            ) : (
                                 <button className="Like-Button" onClick={() => handleLikeClick(child.data)}>Like</button>
                             )}
                             <a href={`https://www.reddit.com${child.data.permalink}`} className='Comment-Link'>View Comments</a>
