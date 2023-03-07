@@ -33,14 +33,12 @@ function RedditData({subRedditName, likedRedditPosts, addToLikedPosts}) {
 
     const handleLikeClick = (post) => {
         addToLikedPosts(post.id);
-      
-        // Disable button
+    
         setLikeBtnVisability((prevState) => ({
           ...prevState,
           [post.id]: true,
         }));
       
-        // Update likedPosts state
         setLikedPosts((prevLikedPosts) => [...prevLikedPosts, post.id]);
       };
       

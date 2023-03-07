@@ -14,13 +14,8 @@ import RedditData from './RedditData';
 const Header = ({title}) => {
     const [subRedditName, setSubRedditName] = useState('');
     const [inputName, setInputName] = useState('');
-    
-    const [likedRedditPosts, setLikedRedditPosts] = useState(() => {
-        const storedLikedRedditPostIds = localStorage.getItem('likedRedditPostIds');
-        return storedLikedRedditPostIds ? JSON.parse(storedLikedRedditPostIds) : [];
-      });
 
-      const [likedPostIDInfo, setlikedPostIDInfo] = useState([]);
+    const [likedPostIDInfo, setlikedPostIDInfo] = useState([]);
     
     const [ShowFetchPage, setFetchPage] = useState(true);
     
