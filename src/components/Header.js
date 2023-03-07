@@ -71,12 +71,11 @@ const Header = ({title}) => {
       };
       
       const removeLikedPost = (postId) => {
-        // Remove post from local storage
+
         const likedPostIds = JSON.parse(localStorage.getItem('likedRedditPostIds'));
         const updatedLikedPostIds = likedPostIds.filter((id) => id !== postId);
         localStorage.setItem('likedRedditPostIds', JSON.stringify(updatedLikedPostIds));
-      
-        // Update state with new filtered array
+
         setLikedRedditPosts(prevLikedRedditPosts => 
           prevLikedRedditPosts.filter(post => post.id !== postId)
         );
@@ -84,10 +83,7 @@ const Header = ({title}) => {
         setlikedPostIDInfo(prevLikedPostIDInfo =>
             prevLikedPostIDInfo.filter(post => post.id !== postId)
           );
-
-      };
-
-      
+      };   
          
     return(
         <div>
