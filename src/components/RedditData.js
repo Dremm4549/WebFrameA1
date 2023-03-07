@@ -29,7 +29,6 @@ function RedditData({subRedditName, likedRedditPosts, addToLikedPosts}) {
     },[url]);
 
     const handleLikeClick = (post) =>{
-        alert(post.id)
         addToLikedPosts(post);
         setLikeBtnVisability((prevState) => ({
             ...prevState,
