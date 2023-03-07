@@ -62,7 +62,7 @@ function RedditData({subRedditName, likedRedditPosts, addToLikedPosts}) {
                             ) : (
                                 <button className="Like-Button" onClick={() => handleLikeClick(child.data)}>Like</button>
                             )}
-                            <a href={`https://www.reddit.com${child.data.permalink}`}>View Comments</a>
+                            <a href={`https://www.reddit.com${child.data.permalink}`} className='Comment-Link'>View Comments</a>
                         </div>                            
                     ))}
                 </div>
