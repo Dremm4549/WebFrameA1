@@ -12,6 +12,7 @@ import React,{useEffect, useState} from 'react';
 
 function RedditData({subRedditName, likedRedditPosts, addToLikedPosts}) {
     const url = `https://api.reddit.com/r/${subRedditName}/hot/`
+    
     const[redditPostData, setRedditPostData] = useState([{}]);
     const[likeBtnVisability, setLikeBtnVisability] = useState([]); 
 
@@ -28,14 +29,13 @@ function RedditData({subRedditName, likedRedditPosts, addToLikedPosts}) {
     },[url]);
 
     const handleLikeClick = (post) =>{
+        alert(post.id)
         addToLikedPosts(post);
         setLikeBtnVisability((prevState) => ({
             ...prevState,
             [post.id]: true,
         }));
     }
-
-    
 
     return (
         <div className='Reddit-Searches'>
@@ -44,22 +44,22 @@ function RedditData({subRedditName, likedRedditPosts, addToLikedPosts}) {
                     <p>Data is loading...</p>
                 </div>
             ):(
-                <div>                 
+                <div>            
+                    {console.log("likeBtnVisability:", likedRedditPosts)}
                     {redditPostData.data.children.slice(0,10).map((child) => (
                         <div key={child.data.id} className={`reddit-post ${likeBtnVisability[child.data.id] ? 'reddit-liked-post' : ""}`}>
                             <h3>Post Name: {child.data.title}</h3>
-                            <p>Score:{child.data.score}</p>
+                            <p>Score: {child.data.score}</p>
                             {child.data.thumbnail !== 'self' ? (
                                 <img src={child.data.thumbnail} alt={child.data.title}></img>
                             ): (
                                 <>
                                     <p>{child.data.selftext}</p>
-                                    <p>{child.data.score}</p>
                                 </>
                             )}
-                              {likedRedditPosts.some(post => post.id === child.data.id) ? (
+                              {likedRedditPosts.some(postId => postId === child.data.id) ? (
                                 <button className="Like-Button" disabled>Liked</button>
-                            ) : (
+                                ) : (
                                 <button className="Like-Button" onClick={() => handleLikeClick(child.data)}>Like</button>
                             )}
                             <a href={`https://www.reddit.com${child.data.permalink}`} className='Comment-Link'>View Comments</a>
