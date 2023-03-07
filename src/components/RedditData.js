@@ -1,3 +1,13 @@
+/*
+* FILE :    RedditData.js
+* PROJECT : Advanced Web Frameworks - Assignment #1
+* PROGRAMMER : Michael Dremo
+* FIRST VERSION : 2023-03-06
+* DESCRIPTION : This file takes care of fetching data from the reddit api
+                It displays each post like title possible text or image
+
+*/
+
 import React,{useEffect, useState} from 'react';
 
 function RedditData({subRedditName, likedRedditPosts, addToLikedPosts}) {
@@ -12,6 +22,7 @@ function RedditData({subRedditName, likedRedditPosts, addToLikedPosts}) {
             data => {
                 setRedditPostData(data)
                 console.log(data)
+                
             }
         )
     },[url]);
@@ -37,22 +48,21 @@ function RedditData({subRedditName, likedRedditPosts, addToLikedPosts}) {
                     {redditPostData.data.children.slice(0,10).map((child) => (
                         <div key={child.data.id} className={`reddit-post ${likeBtnVisability[child.data.id] ? 'reddit-liked-post' : ""}`}>
                             <h3>Post Name: {child.data.title}</h3>
+                            <p>Score:{child.data.score}</p>
                             {child.data.thumbnail !== 'self' ? (
                                 <img src={child.data.thumbnail} alt={child.data.title}></img>
                             ): (
-                                <p>{child.data.selftext}</p>
+                                <>
+                                    <p>{child.data.selftext}</p>
+                                    <p>{child.data.score}</p>
+                                </>
                             )}
                               {likedRedditPosts.some(post => post.id === child.data.id) ? (
                                 <button className="Like-Button" disabled>Liked</button>
                             ) : (
                                 <button className="Like-Button" onClick={() => handleLikeClick(child.data)}>Like</button>
                             )}
-                            {/* {!likeBtnVisability[child.data.id] ? (
-                                <button className="Like-Button" onClick={() => handleLikeClick(child.data)}>Like</button>
-                                 ) : (
-                                <button className="Like-Button" disabled>Liked</button>
-                            )}
-                            {likedRedditPosts.some(post => post.id === child.data.id) && <p>Post {child.data.id} is currently liked!</p>} */}
+                            <a href={`https://www.reddit.com${child.data.permalink}`}>View Comments</a>
                         </div>                            
                     ))}
                 </div>

@@ -1,3 +1,12 @@
+/*
+* FILE :    Header.js
+* PROJECT : Advanced Web Frameworks - Assignment #1
+* PROGRAMMER : Michael Dremo
+* FIRST VERSION : 2023-03-06
+* DESCRIPTION : This file represents and houses elements to search and view liked reddit posts
+
+*/
+
 import React, {useState} from 'react';
 import Button from './Button'
 import RedditData from './RedditData';
@@ -77,6 +86,7 @@ const Header = ({title}) => {
                         {likedRedditPosts.map((post) => (
                             <div key={post.id} className='reddit-liked-post'>
                                 <h3>Post Name: {post.title}</h3>
+                                <p>Score: {post.score}</p>
 
                                 {post.thumbnail !== 'self' ? (
                                 <img src={post.thumbnail} alt={post.title}></img>
@@ -85,6 +95,7 @@ const Header = ({title}) => {
                                 )}
 
                                 <button className='Remove-Liked-Post' onClick={() => removeLikedPost(post.id)}>Remove from Liked</button>
+                                <a href={`https://www.reddit.com${post.permalink}`} className='Comment-Link'>View Comments</a>
                             </div>
                         ))}
                         

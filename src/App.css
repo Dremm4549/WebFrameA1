@@ -77,6 +77,12 @@ body{
   right: 10px;
 }
 
+.Comment-Link{
+  margin-left: 15px;
+  background-color: azure;
+  border-radius: 5px;
+}
+
 .Liked-Posts-Button{
   padding: 2px;
   margin-left: 300px;
